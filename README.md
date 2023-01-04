@@ -5,6 +5,8 @@
 
 A delegated Admin application to manage Call Queues, manage and automate scheduling of agents.
 
+<img src="./Media/CQS-Home.png" height="140">
+
 ## What's in it for you
 
 Microsoft Teams provides an administration portal (Teams Admin Center (TAC)) to manage the different telephony services including auto attendants and call queues for the organization. To access this portal, you need to assign one of the administrator roles defined [here](https://docs.microsoft.com/en-us/MicrosoftTeams/using-admin-roles). To manage the auto attendants and call queues, the minimum required  role is "Teams Administrator" - This role is then applied at the scope of the Azure AD tenant, meaning all users in your organization.
@@ -31,7 +33,7 @@ Here is the application running in Microsoft Teams
     <img src="./Media/AAandCQManagement.jpg" alt="Microsoft Teams AA/CQ Orchestrator screenshot" width="600"/>
 </p> -->
 
-![Microsoft Teams AA/CQ Orchestrator screenshot](./Media/AAandCQManagement.jpg)
+![Microsoft Teams Call Queue Scheduler screenshot](./Media/CQS-Schedule.png)
 
 If you want to start using the solution yourself review the Wiki for the deployment and configuration steps.
 
