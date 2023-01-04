@@ -5,7 +5,7 @@
 
 A delegated Admin application to manage Call Queues, manage and automate scheduling of agents.
 
-<img src="./Media/CQS-Home.png" height="140">
+![Microsoft Teams Call Queue Scheduler screenshot](./Media/CQS-Home.png)
 
 ## What's in it for you
 
