@@ -50,10 +50,10 @@
     },
     "variables": {
         "randomize" : "[substring(uniqueString(resourceGroup().id),0,5)]",
-        "stoAccountName": "[concat('stoaccount',variables('randomize'))]",
-        "serverFarmName" : "[concat(parameters('resourcePrefix'),'-',variables('randomize'))]",
-        "functionAppName" : "[concat(parameters('resourcePrefix'),'-',variables('randomize'))]",
-        "keyVaultName" : "[concat(parameters('resourcePrefix'),'-',variables('randomize'))]"
+        "stoAccountName": "[toLower(concat(parameters('resourcePrefix'),'-stoaccnt-',variables('randomize')))]",
+        "serverFarmName" : "[concat(parameters('resourcePrefix'),'-appsvcplan-',variables('randomize'))]",
+        "functionAppName" : "[concat(parameters('resourcePrefix'),'-function-',variables('randomize'))]",
+        "keyVaultName" : "[concat(parameters('resourcePrefix'),'-keyvault-',variables('randomize'))]"
     },
     "resources": [
         {
@@ -158,8 +158,8 @@
                         "[resourceId('Microsoft.Web/sites/config', variables('functionAppName'), 'authsettingsV2')]"
                     ],
                     "properties": {
-                        "ServiceAccountLogin"   : "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName') ,';SecretName=CQS-service-account-name)')]",
-                        "ServiceAccountPassword" : "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName') ,';SecretName=CQS-service-account-secret)')]",
+                        "ShiftsMgrSvcAccountId"   : "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName') ,';SecretName=CQS-service-account-name)')]",
+                        "ShiftsMgrSvcAccountPwd" : "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName') ,';SecretName=CQS-service-account-secret)')]",
                         "TeamsPSVersion" : "[parameters('TeamsPSModuleVersion')]",
                         "AzureWebJobsStorage" : "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('stoAccountName'), ';EndpointSuffix=', environment().suffixes.storage, ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('stoAccountName')), '2019-06-01').keys[0].value)]",
                         "FUNCTIONS_EXTENSION_VERSION" : "~4",

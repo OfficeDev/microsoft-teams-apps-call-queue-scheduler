@@ -168,6 +168,93 @@ ElseIf([string]::IsNullOrEmpty($AADapp)){
     $tenantID = $(Get-AzTenant).Id
 }
 
+
+
+Write-Host -ForegroundColor blue "Checking if app 'customconnector-$displayName' is already registered"
+$CustomConnectorAADappName = "customconnector-$displayName"
+$AADapp = Get-AzADServicePrincipal -DisplayName $CustomConnectorAADappName
+If ($AADapp.Count -gt 0) {
+    Write-Warning "The Azure AD App name which was provided '$CustomConnectorAADappName' does already exist!"
+    $ResetAADapp = Read-Host "Do you want to reset the credentials the existing Azure AD App registration? `r`nDoing this will impact any other application using this Azure AD App registration. (Answer with yes or no) "
+
+    If($ResetAADapp -eq "yes")
+    {
+        Try
+        {
+            Remove-AzADSpCredential -DisplayName $displayName -ErrorAction Stop
+        }
+        Catch
+        {
+            Write-Error "An issue occured removing the credentials from the Azure AD application"
+            $_.Exception.Message
+        }
+
+        Try
+        {
+            $newCredential = $AADapp|New-AzADSpCredential -ErrorAction Stop
+        }
+        Catch
+        {
+            Write-Error "An issue occured creating new credentials for the Azure AD application"
+            $_.Exception.Message
+        }
+
+        #
+        # Get the AppID and AppSecret from the newly registered App
+        $customConnAppclientID = $AADapp.AppId
+        $customConnAppObjectID = $AADapp.Id
+        $customConnAppclientsecret = $newCredential.SecretText
+
+        # Get the tenantID from current AzureAD PowerShell session
+        $tenantID = $(Get-AzTenant).Id
+        Write-Host -ForegroundColor blue "New app '$CustomConnectorAADappName' registered into AzureAD"
+
+    }
+    ElseIf($ResetAADapp -eq "no")
+    {
+        write-host "user answered no"
+        throw "Please rerun the deployment script by providing a different name for the displayname parameter"
+    }
+}
+ElseIf([string]::IsNullOrEmpty($AADapp)){
+    Write-Host -ForegroundColor blue "Register a new app in Azure AD using '$CustomConnectorAADappName' name for the custom connector"
+    
+    Try
+    {
+        $AADapp = New-AzADServicePrincipal -DisplayName $CustomConnectorAADappName -ErrorAction Stop
+    }
+    Catch
+    {
+        Write-Error "An issue occured creating registering the application"
+        $_.Exception.Message
+    }
+    
+    $webProperties = [Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Models.ApiV10.IMicrosoftGraphWebApplication]@{
+        ImplicitGrantSetting = [Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Models.ApiV10.IMicrosoftGraphImplicitGrantSettings]@{ 
+            EnableAccessTokenIssuance = $true
+            EnableIdTokenIssuance = $true
+        }
+    }
+    Try {
+        Get-AzAdApplication -DisplayName $CustomConnectorAADappName | Get-AzAdApplication -DisplayName $CustomConnectorAADappName | Update-AzADApplication -Web $webProperties -ReplyUrl "https://global.consent.azure-apim.net/redirect" -ErrorAction Stop
+        Write-Host -ForegroundColor blue "New app '$CustomConnectorAADappName' registered into AzureAD"
+    }    
+    Catch {
+        Write-Error "Azure AD application registration error - Please check your permissions in Azure AD and review detailed error description below"
+        $_.Exception.Message
+    }
+
+    #
+    # Get the AppID and AppSecret from the newly registered App
+    $customConnAppclientID = $AADapp.AppId
+    $customConnAppObjectID = $AADapp.Id
+    $customConnAppclientsecret = $AADapp.PasswordCredentials.SecretText
+
+    # Get the tenantID from current AzureAD PowerShell session
+    $tenantID = $(Get-AzTenant).Id
+}
+
+
 Write-Host -ForegroundColor blue "Deploy resource to Azure subscription"
 Try {
     New-AzResourceGroup -Name $rgName -Location $location -Force -ErrorAction Stop | Out-Null
@@ -217,20 +304,21 @@ If ($outputs.provisioningState -ne 'Succeeded') {
 
 Write-Host -ForegroundColor blue "ARM template deployed successfully"
 
-<#
+
 $CurrentUserId = Get-AzContext | ForEach-Object account | ForEach-Object Id
 if($CurrentUserId -ne $serviceAccountUPN)
 {
     # Assign current user with the permissions to list and read Azure KeyVault secrets (to enable the connection with the Power Automate flow)
     Write-Host -ForegroundColor blue "Assigning 'Secrets List & Get' policy on Azure KeyVault for user $CurrentUserId"
     Try {
-        Set-AzKeyVaultAccessPolicy -VaultName $outputs.Outputs.azKeyVaultName.Value -ResourceGroupName $rgName -UserPrincipalName $CurrentUserId -PermissionsToSecrets list,get
+        Set-AzKeyVaultAccessPolicy -VaultName $outputs.Outputs.azKeyVaultName.Value -ResourceGroupName $rgName -UserPrincipalName $CurrentUserId -PermissionsToSecrets list,get,delete,backup,restore,update,create
     }
     Catch {
         Write-Error "Error - Couldn't assign user permissions to get,list the KeyVault secrets - Please review detailed error message below"
         $_.Exception.Message
     }
 
+    <#
     # Assign service account with the permissions to list and read Azure KeyVault secrets (to enable the connection with the Power Automate flow)
     Write-Host -ForegroundColor blue "Assigning 'Secrets List & Get' policy on Azure KeyVault for user $serviceAccountUPN"
     Try {
@@ -239,10 +327,12 @@ if($CurrentUserId -ne $serviceAccountUPN)
     Catch {
         Write-Error "Error - Couldn't assign user permissions to get,list the KeyVault secrets - Please review detailed error message below"
         $_.Exception.Message
-    }    
+    }
+    #>   
 }
 else
 {
+    <#
     # Assign service account with the permissions to list and read Azure KeyVault secrets (to enable the connection with the Power Automate flow)
     Write-Host -ForegroundColor blue "Assigning 'Secrets List & Get' policy on Azure KeyVault for user $serviceAccountUPN"
     Try {
@@ -252,10 +342,10 @@ else
         Write-Error "Error - Couldn't assign user permissions to get,list the KeyVault secrets - Please review detailed error message below"
         $_.Exception.Message
     }
+    #>
 }
-#>
 
-<#
+
 Write-Host -ForegroundColor blue "Getting the Azure Function App key for warm-up test"
 ## lookup the resource id for your Azure Function App ##
 $azFuncResourceId = (Get-AzResource -ResourceGroupName $rgName -ResourceName $outputs.Outputs.azFuncAppName.Value -ResourceType "Microsoft.Web/sites").ResourceId
@@ -279,7 +369,7 @@ else {
 
 #Write-Host -ForegroundColor blue "Warming-up Azure Function apps - This will take a few minutes"
 #& $base\warmup.ps1 -hostname $outputs.Outputs.azFuncHostName.Value -code $code -tenantID $tenantID -clientID $clientID -secret $clientSecret
-#>
+
 
 Write-Host -ForegroundColor blue "Deployment script completed"
 
@@ -298,16 +388,37 @@ $AppRole = $GraphServicePrincipal.AppRoles | Where-Object {$_.Value -eq $Permiss
 New-MgServicePrincipalAppRoleAssignment -AppRoleId $AppRole.Id -ServicePrincipalId $MSI.identityprincipalid -ResourceId $GraphServicePrincipal.Id -PrincipalId $MSI.IdentityPrincipalId | Out-Null
 
 # Assigning group read all permissions
-$PermissionName = "Group.Read.All"
+$PermissionName = "User.Read.All"
 $AppRole = $GraphServicePrincipal.AppRoles | Where-Object {$_.Value -eq $PermissionName -and $_.AllowedMemberTypes -contains "Application"}
 New-MgServicePrincipalAppRoleAssignment -AppRoleId $AppRole.Id -ServicePrincipalId $MSI.IdentityPrincipalId -ResourceId $GraphServicePrincipal.Id -PrincipalId $MSI.IdentityPrincipalId | Out-Null
+
+# Assign delegated permissions for Custom Connector AAD App to the Azure Function App
+# Admin consent is required (manual step)
+$ScopeName = "user_impersonation"
+$AzFuncServicePrincipal = Get-MgServicePrincipal -Filter "startswith(DisplayName, $DisplayName)" | Select-Object -first 1
+$Scope = $AzFuncServicePrincipal.Oauth2PermissionScopes | Where-Object {$_.Value -eq $ScopeName}
+$params = @{
+	RequiredResourceAccess = @(
+		@{
+			ResourceAppId = $ClientId
+			ResourceAccess = @(
+				@{
+					Id = $Scope.Id
+					Type = "Scope"
+				}
+			)
+		}
+	)
+}
+Update-MgApplication -ApplicationId $customConnAppObjectID -BodyParameter $params
 
 # Generating outputs
 $outputsData = [ordered]@{
     FunctionApp       = 'https://'+ $outputs.Outputs.azFuncHostName.value
     FunctionKey      = $outputs.Outputs.azFuncAppCode.Value
     Tenant    = $tenantName
-    ApplicationID      = $clientID
+    AzFunctionAADApplicationID      = $clientID
+    CustomConnectorAADApplicationID = $customConnAppclientID
     KeyVaultName = $outputs.Outputs.azKeyVaultName.Value
     AzFunctionIPs = $outputs.Outputs.outboundIpAddresses.Value
 }
