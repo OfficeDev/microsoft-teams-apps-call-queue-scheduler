@@ -5,6 +5,36 @@
 
 A delegated Admin application to manage Call Queues, manage and automate scheduling of agents.
 
+## What's in it for you
+
+Microsoft Teams provides an administration portal (Teams Admin Center (TAC)) to manage the different telephony services including auto attendants and call queues for the organization. To access this portal, you need to assign one of the administrator roles defined [here](https://docs.microsoft.com/en-us/MicrosoftTeams/using-admin-roles). To manage the auto attendants and call queues, the minimum required  role is "Teams Administrator" - This role is then applied at the scope of the Azure AD tenant, meaning all users in your organization.
+
+Currently the Teams Admin Center does not provide the ability to delegate access to for example the owners of auto attendants to change the greeting or change business hours. This can only be changed by a user who has access to the Teams Admin Center. This application will provide organizations a method to delegate the administration of auto attendants and call queues.
+
+As of today, this application supports the following scenarios:
+* Auto Attendant
+ * Change greeting
+ * Change call routing options (except changing the menu options)
+ * Set business hours (max 1 additional timeslot per day)
+ * Change holiday call settings
+* Call queue
+ * Change greeting
+ * Change music on hold
+ * Change call overflow handling
+ * Change call timeout handling
+
+The architecture of this solution can be adapted to support other scenarios that require delegated admin management of Teams phone system or any other feature accessible via PowerShell cmdlet or even MS Graph API. 
+
+Here is the application running in Microsoft Teams
+
+<!-- <p align="center">
+    <img src="./Media/AAandCQManagement.jpg" alt="Microsoft Teams AA/CQ Orchestrator screenshot" width="600"/>
+</p> -->
+
+![Microsoft Teams AA/CQ Orchestrator screenshot](./Media/AAandCQManagement.jpg)
+
+If you want to start using the solution yourself review the Wiki for the deployment and configuration steps.
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
