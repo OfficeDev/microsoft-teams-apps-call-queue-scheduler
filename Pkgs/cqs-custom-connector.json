@@ -1,0 +1,107 @@
+swagger: '2.0'
+info:
+  title: MS Teams Advanced Voice API
+  description: ''
+  version: '1.0'
+host: cqs-gpy4f.azurewebsites.net
+basePath: /
+schemes:
+  - https
+consumes: []
+produces: []
+paths:
+  /api/ListCallQueues:
+    get:
+      responses:
+        default:
+          description: default
+          schema: {}
+      summary: ListCallQueues
+      operationId: ListCallQueues
+      x-ms-visibility: important
+      description: List teams call queues
+  /api/UpdateCallQueueAgents:
+    get:
+      responses:
+        default:
+          description: default
+          schema: {}
+      summary: UpdateCallQueueAgents
+      description: Updates agents listed in the call queue
+      operationId: UpdateCallQueueAgents
+      parameters:
+        - name: CQId
+          in: query
+          required: false
+          type: string
+        - name: agents
+          in: query
+          required: false
+          type: string
+  /api/CsvInputParser:
+    post:
+      responses:
+        default:
+          description: default
+          schema: {}
+      summary: InvokeCSVParser
+      operationId: InvokeCSVParser
+      description: InvokeCSVParser
+      x-ms-visibility: important
+      parameters:
+        - name: Content-Type
+          in: header
+          required: false
+          type: string
+        - name: Accept
+          in: header
+          required: false
+          type: string
+        - name: body
+          in: body
+          required: false
+          schema:
+            type: object
+            properties:
+              filename:
+                type: string
+                description: filename
+              filecontent:
+                type: string
+                description: filecontent
+  /api/GetCallQueueById:
+    get:
+      responses:
+        default:
+          description: default
+          schema: {}
+      summary: GetCallQueueDetailsById
+      operationId: GetCallQueueDetailsById
+      parameters:
+        - name: Identity
+          in: query
+          required: false
+          type: string
+      description: GetCallQueueDetailsById
+  /api/TestAzFunction:
+    get:
+      responses:
+        default:
+          description: default
+          schema: {}
+      summary: Test calling AAD secured Azure Function
+      operationId: TestAzFun
+      parameters: []
+definitions: {}
+parameters: {}
+responses: {}
+securityDefinitions:
+  oauth2-auth:
+    type: oauth2
+    flow: accessCode
+    authorizationUrl: https://login.windows.net/common/oauth2/authorize
+    tokenUrl: https://login.windows.net/common/oauth2/authorize
+    scopes: {}
+security:
+  - oauth2-auth: []
+tags: []

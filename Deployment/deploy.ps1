@@ -78,6 +78,7 @@ else
 
 Write-Host -ForegroundColor blue "Checking if app '$displayName' is already registered"
 $AADapp = Get-AzADServicePrincipal -DisplayName $displayName
+$AppIdURI = $null
 If ($AADapp.Count -gt 0) {
     Write-Warning "The Azure AD App name which was provided '$displayName' does already exist!"
     $ResetAADapp = Read-Host "Do you want to reset the credentials the existing Azure AD App registration? `r`nDoing this will impact any other application using this Azure AD App registration. (Answer with yes or no) "
@@ -108,6 +109,7 @@ If ($AADapp.Count -gt 0) {
         # Get the AppID and AppSecret from the newly registered App
         $clientID = $AADapp.AppId
         $clientsecret = $newCredential.SecretText
+        $AppIdURI = "api://azfunc-" + $AADapp.AppId
 
         # Get the tenantID from current AzureAD PowerShell session
         $tenantID = $(Get-AzTenant).Id
@@ -236,7 +238,7 @@ ElseIf([string]::IsNullOrEmpty($AADapp)){
         }
     }
     Try {
-        Get-AzAdApplication -DisplayName $CustomConnectorAADappName | Get-AzAdApplication -DisplayName $CustomConnectorAADappName | Update-AzADApplication -Web $webProperties -ReplyUrl "https://global.consent.azure-apim.net/redirect" -ErrorAction Stop
+        Get-AzAdApplication -DisplayName $CustomConnectorAADappName | Update-AzADApplication -Web $webProperties -ReplyUrl "https://global.consent.azure-apim.net/redirect" -ErrorAction Stop
         Write-Host -ForegroundColor blue "New app '$CustomConnectorAADappName' registered into AzureAD"
     }    
     Catch {
@@ -369,12 +371,12 @@ else {
 
 #Write-Host -ForegroundColor blue "Warming-up Azure Function apps - This will take a few minutes"
 #& $base\warmup.ps1 -hostname $outputs.Outputs.azFuncHostName.Value -code $code -tenantID $tenantID -clientID $clientID -secret $clientSecret
-
-
 Write-Host -ForegroundColor blue "Deployment script completed"
 
-## Assigning the correct permissions to the Managed Identity of the App
 
+
+
+## Assigning the correct permissions to the Managed Identity of the App
 $MSI = Get-AzFunctionApp -Name $($outputs.Outputs.azFuncAppName.Value) -ResourceGroup $rgName
 
 ## Connect to Graph API and retrieving Graph API id
@@ -412,13 +414,18 @@ $params = @{
 }
 Update-MgApplication -ApplicationId $customConnAppObjectID -BodyParameter $params
 
+
 # Generating outputs
 $outputsData = [ordered]@{
     FunctionApp       = 'https://'+ $outputs.Outputs.azFuncHostName.value
     FunctionKey      = $outputs.Outputs.azFuncAppCode.Value
     Tenant    = $tenantName
+    TenantID  = $(Get-AzTenant).Id
     AzFunctionAADApplicationID      = $clientID
+    AzFunctionAADAppIDURI           = $AppIdURI
     CustomConnectorAADApplicationID = $customConnAppclientID
+    CustomConnectorAADApplicationSecret = $customConnAppclientSecret
+    AzFunctionManagedID = $MSI.IdentityPrincipalId
     KeyVaultName = $outputs.Outputs.azKeyVaultName.Value
     AzFunctionIPs = $outputs.Outputs.outboundIpAddresses.Value
 }
