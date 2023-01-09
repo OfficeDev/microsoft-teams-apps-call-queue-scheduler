@@ -45,7 +45,7 @@ Write-Host -ForegroundColor blue "Azure sign-in request - Please check the sign-
 
 Try
 {
-    Connect-AzAccount #-TenantId 8977abe7-f60c-4560-a93c-a506f2711c6a #-WarningAction Ignore -ErrorAction Stop |Out-Null
+    Connect-AzAccount #-WarningAction Ignore -ErrorAction Stop |Out-Null
 }
 Catch
 {
@@ -202,8 +202,7 @@ If ($AADapp.Count -gt 0) {
         }
 
         #
-        # Get the AppID, ObjectID and AppSecret from the newly registered App
-        $AADapp =  Get-AzAdApplication -DisplayName $CustomConnectorAADappName
+        # Get the AppID and AppSecret from the newly registered App
         $customConnAppclientID = $AADapp.AppId
         $customConnAppObjectID = $AADapp.Id
         $customConnAppclientsecret = $newCredential.SecretText
@@ -233,14 +232,13 @@ ElseIf([string]::IsNullOrEmpty($AADapp)){
     }
     
     $webProperties = [Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Models.ApiV10.IMicrosoftGraphWebApplication]@{
-        RedirectUri = @("https://global.consent.azure-apim.net/redirect")
         ImplicitGrantSetting = [Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Models.ApiV10.IMicrosoftGraphImplicitGrantSettings]@{ 
             EnableAccessTokenIssuance = $true
             EnableIdTokenIssuance = $true
         }
     }
     Try {
-        Get-AzAdApplication -DisplayName $CustomConnectorAADappName | Update-AzADApplication -Web $webProperties -AvailableToOtherTenants $true -ErrorAction Stop #-ReplyUrl "https://global.consent.azure-apim.net/redirect"
+        Get-AzAdApplication -DisplayName $CustomConnectorAADappName | Update-AzADApplication -Web $webProperties -ReplyUrl "https://global.consent.azure-apim.net/redirect" -ErrorAction Stop
         Write-Host -ForegroundColor blue "New app '$CustomConnectorAADappName' registered into AzureAD"
     }    
     Catch {
@@ -249,8 +247,7 @@ ElseIf([string]::IsNullOrEmpty($AADapp)){
     }
 
     #
-    # Get the AppID, ObjectID and AppSecret from the newly registered App
-    $AADapp =  Get-AzAdApplication -DisplayName $CustomConnectorAADappName
+    # Get the AppID and AppSecret from the newly registered App
     $customConnAppclientID = $AADapp.AppId
     $customConnAppObjectID = $AADapp.Id
     $customConnAppclientsecret = $AADapp.PasswordCredentials.SecretText
@@ -316,7 +313,7 @@ if($CurrentUserId -ne $serviceAccountUPN)
     # Assign current user with the permissions to list and read Azure KeyVault secrets (to enable the connection with the Power Automate flow)
     Write-Host -ForegroundColor blue "Assigning 'Secrets List & Get' policy on Azure KeyVault for user $CurrentUserId"
     Try {
-        Set-AzKeyVaultAccessPolicy -VaultName $outputs.Outputs.azKeyVaultName.Value -ResourceGroupName $rgName -UserPrincipalName $CurrentUserId -PermissionsToSecrets list,get,delete,set
+        Set-AzKeyVaultAccessPolicy -VaultName $outputs.Outputs.azKeyVaultName.Value -ResourceGroupName $rgName -UserPrincipalName $CurrentUserId -PermissionsToSecrets list,get,delete,backup,restore,update,create
     }
     Catch {
         Write-Error "Error - Couldn't assign user permissions to get,list the KeyVault secrets - Please review detailed error message below"
@@ -382,23 +379,6 @@ Write-Host -ForegroundColor blue "Deployment script completed"
 ## Assigning the correct permissions to the Managed Identity of the App
 $MSI = Get-AzFunctionApp -Name $($outputs.Outputs.azFuncAppName.Value) -ResourceGroup $rgName
 
-## Add redirect URI and enable ID token issuance for the AAD app associated with Azure Function
-$webProperties = [Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Models.ApiV10.IMicrosoftGraphWebApplication]@{
-    RedirectUri = @("https://$($MSI.DefaultHostName)/.auth/login/aad/callback")
-    ImplicitGrantSetting = [Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Models.ApiV10.IMicrosoftGraphImplicitGrantSettings]@{ 
-        EnableIdTokenIssuance = $true
-    }
-}
-Try {
-    Get-AzAdApplication -DisplayName $displayName | Update-AzADApplication -Web $webProperties -ErrorAction Stop
-    Write-Host -ForegroundColor blue "Added redirect URI and enabled ID token issuance for the AAD app associated with Azure Function"
-}    
-Catch {
-    Write-Error "Azure AD application registration error - Please check your permissions in Azure AD and review detailed error description below"
-    $_.Exception.Message
-}
-
-
 ## Connect to Graph API and retrieving Graph API id
 $token = Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com"
 Connect-MgGraph -AccessToken $token.Token
@@ -417,7 +397,7 @@ New-MgServicePrincipalAppRoleAssignment -AppRoleId $AppRole.Id -ServicePrincipal
 # Assign delegated permissions for Custom Connector AAD App to the Azure Function App
 # Admin consent is required (manual step)
 $ScopeName = "user_impersonation"
-$AzFuncServicePrincipal = Get-MgServicePrincipal -Filter "startswith(DisplayName, '$DisplayName')" | Select-Object -first 1
+$AzFuncServicePrincipal = Get-MgServicePrincipal -Filter "startswith(DisplayName, $DisplayName)" | Select-Object -first 1
 $Scope = $AzFuncServicePrincipal.Oauth2PermissionScopes | Where-Object {$_.Value -eq $ScopeName}
 $params = @{
 	RequiredResourceAccess = @(

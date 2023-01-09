@@ -50,7 +50,7 @@
     },
     "variables": {
         "randomize" : "[substring(uniqueString(resourceGroup().id),0,5)]",
-        "stoAccountName": "[toLower(concat(parameters('resourcePrefix'),'-stoaccnt-',variables('randomize')))]",
+        "stoAccountName": "[toLower(concat(parameters('resourcePrefix'),'stoaccnt',variables('randomize')))]",
         "serverFarmName" : "[concat(parameters('resourcePrefix'),'-appsvcplan-',variables('randomize'))]",
         "functionAppName" : "[concat(parameters('resourcePrefix'),'-function-',variables('randomize'))]",
         "keyVaultName" : "[concat(parameters('resourcePrefix'),'-keyvault-',variables('randomize'))]"
