@@ -9,6 +9,11 @@ param($Request, $TriggerMetadata)
 $secpasswd = ConvertTo-SecureString -String $ENV:ShiftsMgrSvcAccountPwd -AsPlainText -Force 
 $mycreds = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList $ENV:ShiftsMgrSvcAccountId, $secpasswd
 
+$cqid = $Request.Query.CQId
+
+if (-not $cqid) {
+    $cqid = $ENV:ShiftMgrCallQueueId
+}
 
 <#
 $SvcAcctPwd = "PES@"
@@ -18,7 +23,7 @@ $mycreds = New-Object -TypeName "System.Management.Automation.PSCredential" -Arg
 #>
 
 Connect-MicrosoftTeams -Credential $mycreds | Out-Null
-$body = Get-CsCallQueue -Identity $ENV:ShiftMgrCallQueueId | Select Name, Identity, Agents | ConvertTo-Json
+$body = Get-CsCallQueue -Identity $cqid | Select Name, Identity, Agents | ConvertTo-Json
 #$body = $ENV:ShiftMgrCallQueueId
 Write-output "PS Result>"
 Write-output `n$body

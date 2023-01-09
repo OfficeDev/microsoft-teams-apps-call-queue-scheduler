@@ -57,8 +57,11 @@ $appRole = "write"
 New-MgSitePermission -SiteId $siteInfo.id -Roles $appRole -GrantedToIdentities @{ Application = $application }
 
 Write-Host "SPO Site Url: "+ $siteInfo.webUrl
+Write-Host "SPO Site ID: "+ $siteInfo.Id
 
 # Deploy the site template
 Write-Host "Deploying site template to create the required lists and libraries"
 Connect-PnPOnline -Url $siteInfo.webUrl -DeviceLogin
 Invoke-PnPSiteTemplate -Path ..\Pkgs\cqs-manager-site-lists.xml -Verbose -IgnoreDuplicateDataRowErrors -Handlers Lists
+
+Get-MgSiteList -SiteId $siteInfo.Id | ?{$_.Name -like "Shifts*"} | Select DisplayName, Id, WebUrl

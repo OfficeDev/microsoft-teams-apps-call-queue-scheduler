@@ -7,11 +7,13 @@ param($Request, $TriggerMetadata)
 Write-Host "PowerShell HTTP trigger function processed a request."
 
 # Interact with query parameters or the body of the request.
-$cqid = $Request.Query.CQId
-$agents = $Request.Query.Agents
+$cqid = $Request.Body.CQId
+$agents = $Request.Body.AgentsList
+<#
 if (-not $agents) {
     $agents = $Request.Body.Agents
 }
+#>
 
 $body = "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
 

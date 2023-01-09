@@ -7,9 +7,13 @@ $UpdateSchedules = ".\Modules\UpdateSchedulesManifest\UpdateScheduleEntry.psd1"
 Import-Module $AuthentionModuleLocation
 Import-Module $UpdateSchedules
 $authHeader = Get-AuthenticationToken
-
+Write-Host $authHeader.Authorization
 $runasUserUpn = $Request.Headers['X-MS-CLIENT-PRINCIPAL-NAME']
 $userid = $Request.Headers['X-MS-CLIENT-PRINCIPAL-ID']
+
+$SPOSiteId = $ENV:ShiftsMgrSPOSiteId
+$ManifestListId = $ENV:ShiftsMgrManifestListId
+$ChangeLogListId = $ENV:ShiftsMgrChangeLogListId
 
 # Write to the Azure Functions log stream.
 Write-Host "PowerShell HTTP trigger function processed a request."
@@ -100,7 +104,8 @@ $allShifts | %{
 
     $r.requests += @{
         id = $i+1
-        url = "sites/m365x229910.sharepoint.com,4d5a27d4-5891-420f-8822-e29376ca4eed,b2648eb8-4d00-4bc3-b3bb-f5c96ec3ad7d/lists/ade46535-7cd3-4418-b872-5b752c830dfa/items"
+        #url = "sites/m365x229910.sharepoint.com,4d5a27d4-5891-420f-8822-e29376ca4eed,b2648eb8-4d00-4bc3-b3bb-f5c96ec3ad7d/lists/ade46535-7cd3-4418-b872-5b752c830dfa/items"
+        url = "sites/$SPOSiteId/lists/$ManifestListId/items"
         method = "POST"
         body = @{fields = @{    Title="ShiftEntry";
                                 AgentShiftDate="$date";
@@ -121,6 +126,8 @@ $allShifts | %{
             $payload = ConvertTo-Json $r -Depth 4
             Write-Host "Batch run id $i"
             $result = Add-SchedulesBatch -Token $authHeader -Payload $payload -BatchId $i
+            Write-Host $result.StatusCode
+            Write-Host $result.Content
             $r.requests = @()
           }
           $i += 1

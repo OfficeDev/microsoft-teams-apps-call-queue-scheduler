@@ -25,18 +25,15 @@ $packageFiles = @(
     "$($rootfolder)FunctionApp\CQS\CsvInputParser",
     "$($rootfolder)FunctionApp\CQS\GetCallQueueById",
     "$($rootfolder)FunctionApp\CQS\GetCallQueues",
-    "$($rootfolder)FunctionApp\CQS\HttpTriggerTestMSTeams",
     "$($rootfolder)FunctionApp\CQS\ListCallQueues",
-    "$($rootfolder)FunctionApp\CQS\ParseSchedulesCSV",
     "$($rootfolder)FunctionApp\CQS\ProcessShifts",
-    "$($rootfolder)FunctionApp\CQS\TestAzFunction",
     "$($rootfolder)FunctionApp\CQS\UpdateCallQueueAgents",
     "$($rootfolder)FunctionApp\CQS\Modules",
     "$($rootfolder)FunctionApp\CQS\host.json",
     "$($rootfolder)FunctionApp\CQS\profile.ps1",
     "$($rootfolder)FunctionApp\CQS\requirements.psd1"
 )
-$destinationPath = $rootfolder + "Packages\Azure\cqs-function-artifact.zip"
+$destinationPath = $rootfolder + "Pkgs\cqs-function-artifact.zip"
 
 Write-Host "Creating Azure artifact"
 Compress-Archive -Path $packageFiles -DestinationPath $destinationPath -CompressionLevel optimal -Force
