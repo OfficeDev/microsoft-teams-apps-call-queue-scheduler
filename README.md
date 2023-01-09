@@ -3,27 +3,34 @@
 | [Solution overview](https://github.com/OfficeDev/microsoft-teams-apps-call-queue-scheduler/wiki/1.-Solution-overview) |[Deployment guide](https://github.com/OfficeDev/microsoft-teams-apps-call-queue-scheduler/wiki/2.-Deployment) | [Configuration guide](https://github.com/OfficeDev/microsoft-teams-apps-call-queue-scheduler/wiki/3.-Configuration) | [FAQ](https://github.com/OfficeDev/microsoft-teams-apps-call-queue-scheduler/wiki/4.-FAQ) | [Support](https://github.com/OfficeDev/microsoft-teams-apps-call-queue-scheduler/blob/main/SUPPORT.md) |
 | ---- | ---- | ---- | ---- | ---- |
 
-A delegated Admin application to manage Call Queues, manage and automate scheduling of agents.
+This application allows a delegated administrator to manage the active agents for a Microsoft Teams Call Queue in real-time and/or through a defined shift schedule.
 
 ![Microsoft Teams Call Queue Scheduler screenshot](./Media/CQS-Home.png)
 
-## What's in it for you
+## About this application
 
-Microsoft Teams provides an administration portal (Teams Admin Center (TAC)) to manage the different telephony services including auto attendants and call queues for the organization. To access this portal, you need to assign one of the administrator roles defined [here](https://docs.microsoft.com/en-us/MicrosoftTeams/using-admin-roles). To manage the auto attendants and call queues, the minimum required  role is "Teams Administrator" - This role is then applied at the scope of the Azure AD tenant, meaning all users in your organization.
+The Teams Admin Center (TAC) has the following limitations:
 
-Currently the Teams Admin Center does not provide the ability to delegate access to for example the owners of auto attendants to change the greeting or change business hours. This can only be changed by a user who has access to the Teams Admin Center. This application will provide organizations a method to delegate the administration of auto attendants and call queues.
+* granular delegatation capability to allow a defined administration to managed the named agents for a given Call Queue.
+* scheduling agents in the Call Queue for specific shifts in the future.
 
-As of today, this application supports the following scenarios:
-* Auto Attendant
- * Change greeting
- * Change call routing options (except changing the menu options)
- * Set business hours (max 1 additional timeslot per day)
- * Change holiday call settings
-* Call queue
- * Change greeting
- * Change music on hold
- * Change call overflow handling
- * Change call timeout handling
+This application provides the following capability:
+
+* Call Queue
+    * Select a delegated Call Queue and view the list of named agents that are currently active.
+    * Make real-time changes to the list of named agents defined in a Call Queue by a delegated administrator.
+    * Schedule agents in shifts to allow for the automation of named agents in the Call Queue by a delegated administrator.
+        * Schedule agents in advance by uploading a CSV file.
+        * Modify an existing shift schedule
+            * add an agent to the existing schedule
+            * remove an agent from the existing schedule
+            * modify the shift of a scheduled agent.
+
+This application works by manipulating the list of named agents in a Call Queue.  This application does NOT support agents defined as part of a group or a Team channel.  Since this application leverages named agents, the number of agents that can be active in the queue at the same time is limited to 20.  The number of agents that could be potentially added to the queue can be much greater.  
+
+Note: this application does not have an error handling to account for the case where the 21st or greater agent is added to the queue. 
+
+See Step 3: Set up who will answer incoming calls [here](https://learn.microsoft.com/en-us/microsoftteams/create-a-phone-system-call-queue#steps-to-create-a-call-queue) for detail on the different ways agents can be defined to answer calls. 
 
 The architecture of this solution can be adapted to support other scenarios that require delegated admin management of Teams phone system or any other feature accessible via PowerShell cmdlet or even MS Graph API. 
 
