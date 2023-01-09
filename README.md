@@ -28,9 +28,9 @@ This application provides the following capability:
 
 This application works by manipulating the list of named agents in a Call Queue.  This application does NOT support agents defined as part of a group or a Team channel.  Since this application leverages named agents, the number of agents that can be active in the queue at the same time is limited to 20.  The number of agents that could be potentially added to the queue can be much greater.  
 
-Note: this application does not have an error handling to account for the case where the 21st or greater agent is added to the queue. 
-
 See Step 3: Set up who will answer incoming calls [here](https://learn.microsoft.com/en-us/microsoftteams/create-a-phone-system-call-queue#steps-to-create-a-call-queue) for detail on the different ways agents can be defined to answer calls. 
+
+Note: This is a sample application.  It does not have robust error handling to accomodate all exceptions.  This includes error handling to account for the case where the 21st or greater agent is added to the queue, or to handle situations involving groups or Teams channels.  
 
 The architecture of this solution can be adapted to support other scenarios that require delegated admin management of Teams phone system or any other feature accessible via PowerShell cmdlet or even MS Graph API. 
 
@@ -65,3 +65,13 @@ trademarks or logos is subject to and must follow
 [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
+
+## Legal Notice
+
+This app template is provided under the MIT License terms.  In addition to these terms, by using this app template you agree to the following:
+
+* You, not Microsoft, will license the use of your app to users or organization.
+* This app template is not intended to substitute your own regulatory due diligence or make you or your app compliant with respect to any applicable regulations, including but not limited to privacy, healthcare, employment, or financial regulations.
+* You are responsible for complying with all applicable privacy and security regulations including those related to use, collection and handling of any personal data by your app.  This includes complying with all internal privacy and security policies of your organization if your app is developed to be sideloaded internally within your organization. Where applicable, you may be responsible for data related incidents or data subject requests for data collected through your app.
+* Any trademarks or registered trademarks of Microsoft in the United States and/or other countries and logos included in this repository are the property of Microsoft, and the license for this project does not grant you rights to use any Microsoft names, logos or trademarks outside of this repository.  Microsoft’s general trademark guidelines can be found here.
+* Use of this template does not guarantee acceptance of your app to the Teams app store.  To make this app available in the Teams app store, you will have to comply with the submission and validation process, and all associated requirements such as including your own privacy statement and terms of use for your app.
