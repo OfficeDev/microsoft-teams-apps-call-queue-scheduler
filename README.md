@@ -3,27 +3,34 @@
 | [Solution overview](https://github.com/OfficeDev/microsoft-teams-apps-call-queue-scheduler/wiki/1.-Solution-overview) |[Deployment guide](https://github.com/OfficeDev/microsoft-teams-apps-call-queue-scheduler/wiki/2.-Deployment) | [Configuration guide](https://github.com/OfficeDev/microsoft-teams-apps-call-queue-scheduler/wiki/3.-Configuration) | [FAQ](https://github.com/OfficeDev/microsoft-teams-apps-call-queue-scheduler/wiki/4.-FAQ) | [Support](https://github.com/OfficeDev/microsoft-teams-apps-call-queue-scheduler/blob/main/SUPPORT.md) |
 | ---- | ---- | ---- | ---- | ---- |
 
-A delegated Admin application to manage Call Queues, manage and automate scheduling of agents.
+This application allows a delegated administrator to manage the active agents for a Microsoft Teams Call Queue in real-time and/or through a defined shift schedule.
 
 ![Microsoft Teams Call Queue Scheduler screenshot](./Media/CQS-Home.png)
 
-## What's in it for you
+## About this application
 
-Microsoft Teams provides an administration portal (Teams Admin Center (TAC)) to manage the different telephony services including auto attendants and call queues for the organization. To access this portal, you need to assign one of the administrator roles defined [here](https://docs.microsoft.com/en-us/MicrosoftTeams/using-admin-roles). To manage the auto attendants and call queues, the minimum required  role is "Teams Administrator" - This role is then applied at the scope of the Azure AD tenant, meaning all users in your organization.
+The Teams Admin Center (TAC) has the following limitations:
 
-Currently the Teams Admin Center does not provide the ability to delegate access to for example the owners of auto attendants to change the greeting or change business hours. This can only be changed by a user who has access to the Teams Admin Center. This application will provide organizations a method to delegate the administration of auto attendants and call queues.
+* granular delegatation capability to allow a defined administration to managed the named agents for a given Call Queue.
+* scheduling agents in the Call Queue for specific shifts in the future.
 
-As of today, this application supports the following scenarios:
-* Auto Attendant
- * Change greeting
- * Change call routing options (except changing the menu options)
- * Set business hours (max 1 additional timeslot per day)
- * Change holiday call settings
-* Call queue
- * Change greeting
- * Change music on hold
- * Change call overflow handling
- * Change call timeout handling
+This application provides the following capability:
+
+* Call Queue
+    * Select a delegated Call Queue and view the list of named agents that are currently active.
+    * Make real-time changes to the list of named agents defined in a Call Queue by a delegated administrator.
+    * Schedule agents in shifts to allow for the automation of named agents in the Call Queue by a delegated administrator.
+        * Schedule agents in advance by uploading a CSV file.
+        * Modify an existing shift schedule
+            * add an agent to the existing schedule
+            * remove an agent from the existing schedule
+            * modify the shift of a scheduled agent.
+
+This application works by manipulating the list of named agents in a Call Queue.  This application does NOT support agents defined as part of a group or a Team channel.  Since this application leverages named agents, the number of agents that can be active in the queue at the same time is limited to 20.  The number of agents that could be potentially added to the queue can be much greater.  
+
+See Step 3: Set up who will answer incoming calls [here](https://learn.microsoft.com/en-us/microsoftteams/create-a-phone-system-call-queue#steps-to-create-a-call-queue) for detail on the different ways agents can be defined to answer calls. 
+
+Note: This is a sample application.  It does not have robust error handling to accomodate all exceptions.  This includes error handling to account for the case where the 21st or greater agent is added to the queue, or to handle situations involving groups or Teams channels.  
 
 The architecture of this solution can be adapted to support other scenarios that require delegated admin management of Teams phone system or any other feature accessible via PowerShell cmdlet or even MS Graph API. 
 
@@ -58,3 +65,13 @@ trademarks or logos is subject to and must follow
 [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
 Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
 Any use of third-party trademarks or logos are subject to those third-party's policies.
+
+## Legal Notice
+
+This app template is provided under the MIT License terms.  In addition to these terms, by using this app template you agree to the following:
+
+* You, not Microsoft, will license the use of your app to users or organization.
+* This app template is not intended to substitute your own regulatory due diligence or make you or your app compliant with respect to any applicable regulations, including but not limited to privacy, healthcare, employment, or financial regulations.
+* You are responsible for complying with all applicable privacy and security regulations including those related to use, collection and handling of any personal data by your app.  This includes complying with all internal privacy and security policies of your organization if your app is developed to be sideloaded internally within your organization. Where applicable, you may be responsible for data related incidents or data subject requests for data collected through your app.
+* Any trademarks or registered trademarks of Microsoft in the United States and/or other countries and logos included in this repository are the property of Microsoft, and the license for this project does not grant you rights to use any Microsoft names, logos or trademarks outside of this repository.  Microsoft’s general trademark guidelines can be found here.
+* Use of this template does not guarantee acceptance of your app to the Teams app store.  To make this app available in the Teams app store, you will have to comply with the submission and validation process, and all associated requirements such as including your own privacy statement and terms of use for your app.
