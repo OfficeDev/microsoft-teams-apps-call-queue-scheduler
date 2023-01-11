@@ -50,7 +50,7 @@ while ($siteInfo -eq $null)
 
 Write-Host "Granting write permissions to the Azure Function Managed Identity using Site.Selected scope"
 $application = @{
-    id = $AzureFunctionMID
+    id = $AzFunctionMID
     displayName = "cqs-azfunction-mid"
 }
 $appRole = "write"
