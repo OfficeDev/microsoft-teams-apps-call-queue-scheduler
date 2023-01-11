@@ -381,7 +381,7 @@ Write-Host -ForegroundColor blue "Deployment script completed"
 
 ## Assigning the correct permissions to the Managed Identity of the App
 $MSI = Get-AzFunctionApp -Name $($outputs.Outputs.azFuncAppName.Value) -ResourceGroup $rgName
-$AzFuncMSIServicePrincipal = Get-AzAADServicePrincipal -ApplicationId $MSI.IdentityPrincipalId
+$AzFuncMSIServicePrincipal = Get-AzADServicePrincipal -ApplicationId $MSI.IdentityPrincipalId
 
 ## Add redirect URI and enable ID token issuance for the AAD app associated with Azure Function
 $webProperties = [Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Models.ApiV10.IMicrosoftGraphWebApplication]@{
