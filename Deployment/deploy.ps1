@@ -447,7 +447,7 @@ $outputsData = [ordered]@{
     AzFunctionManagedID = $AzFuncMSIServicePrincipal.AppId
     CustomConnectorAADApplicationID = $customConnAppclientID
     CustomConnectorAADApplicationSecret = $customConnAppclientSecret
-        KeyVaultName = $outputs.Outputs.azKeyVaultName.Value
+    KeyVaultName = $outputs.Outputs.azKeyVaultName.Value
     #AzFunctionIPs = $outputs.Outputs.outboundIpAddresses.Value
 }
 

@@ -160,6 +160,10 @@
                     "properties": {
                         "ShiftsMgrSvcAccountId"   : "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName') ,';SecretName=CQS-service-account-name)')]",
                         "ShiftsMgrSvcAccountPwd" : "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName') ,';SecretName=CQS-service-account-secret)')]",
+                        "ShiftMgrCallQueueId" : "Placed holder for Shifts Manager Call Queue Id",
+                        "ShiftsMgrSPOSiteId" : "Placed holder for Shifts Manager SPO Site Id",
+                        "ShiftsMgrManifestListId" : "Placed holder for Shifts Manager Manifest List Id",
+                        "ShiftsMgrChangeLogListId" : "Placed holder for Shifts Manager Change Log List Id",
                         "TeamsPSVersion" : "[parameters('TeamsPSModuleVersion')]",
                         "AzureWebJobsStorage" : "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('stoAccountName'), ';EndpointSuffix=', environment().suffixes.storage, ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('stoAccountName')), '2019-06-01').keys[0].value)]",
                         "FUNCTIONS_EXTENSION_VERSION" : "~4",
