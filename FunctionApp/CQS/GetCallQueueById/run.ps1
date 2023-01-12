@@ -9,7 +9,7 @@ param($Request, $TriggerMetadata)
 $secpasswd = ConvertTo-SecureString -String $ENV:ShiftsMgrSvcAccountPwd -AsPlainText -Force 
 $mycreds = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList $ENV:ShiftsMgrSvcAccountId, $secpasswd
 
-$cqid = $Request.Query.CQId
+$cqid = $Request.Query.Identity
 
 if (-not $cqid) {
     $cqid = $ENV:ShiftMgrCallQueueId
