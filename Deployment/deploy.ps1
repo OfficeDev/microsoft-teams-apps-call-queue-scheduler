@@ -45,7 +45,7 @@ Write-Host -ForegroundColor blue "Azure sign-in request - Please check the sign-
 
 Try
 {
-    Connect-AzAccount #-TenantId 8977abe7-f60c-4560-a93c-a506f2711c6a #-WarningAction Ignore -ErrorAction Stop |Out-Null
+    Connect-AzAccount -DeviceCode #-WarningAction Ignore -ErrorAction Stop |Out-Null #-TenantId 8977abe7-f60c-4560-a93c-a506f2711c6a 
 }
 Catch
 {
@@ -172,8 +172,8 @@ ElseIf([string]::IsNullOrEmpty($AADapp)){
 
 
 
-Write-Host -ForegroundColor blue "Checking if app 'customconnector-$displayName' is already registered"
-$CustomConnectorAADappName = "customconnector-$displayName"
+Write-Host -ForegroundColor blue "Checking if app '$displayName-customconnector' is already registered"
+$CustomConnectorAADappName = "$displayName-customconnector"
 $AADapp = Get-AzADServicePrincipal -DisplayName $CustomConnectorAADappName
 If ($AADapp.Count -gt 0) {
     Write-Warning "The Azure AD App name which was provided '$CustomConnectorAADappName' does already exist!"
@@ -183,7 +183,7 @@ If ($AADapp.Count -gt 0) {
     {
         Try
         {
-            Remove-AzADSpCredential -DisplayName $displayName -ErrorAction Stop
+            Remove-AzADSpCredential -DisplayName $CustomConnectorAADappName -ErrorAction Stop
         }
         Catch
         {
@@ -248,12 +248,22 @@ ElseIf([string]::IsNullOrEmpty($AADapp)){
         $_.Exception.Message
     }
 
+    Try
+    {
+        $newCredential = Get-AzADServicePrincipal -DisplayName $CustomConnectorAADappName | New-AzADSpCredential -ErrorAction Stop
+    }
+    Catch
+    {
+        Write-Error "An issue occured creating new credentials for the Azure AD application. You can ignore this and generate new credentials manually in the Azure AD portal."
+        $_.Exception.Message
+    }
+
     #
     # Get the AppID, ObjectID and AppSecret from the newly registered App
     $AADapp =  Get-AzAdApplication -DisplayName $CustomConnectorAADappName
     $customConnAppclientID = $AADapp.AppId
     $customConnAppObjectID = $AADapp.Id
-    $customConnAppclientsecret = $AADapp.PasswordCredentials.SecretText
+    $customConnAppclientsecret = $newCredential.SecretText
 
     # Get the tenantID from current AzureAD PowerShell session
     $tenantID = $(Get-AzTenant).Id
@@ -379,9 +389,9 @@ Write-Host -ForegroundColor blue "Deployment script completed"
 
 
 
-## Assigning the correct permissions to the Managed Identity of the App
-$MSI = Get-AzFunctionApp -Name $($outputs.Outputs.azFuncAppName.Value) -ResourceGroup $rgName
-$AzFuncMSIServicePrincipal = Get-AzADServicePrincipal -ApplicationId $MSI.IdentityPrincipalId
+## Assigning the correct permissions to the Managed Identity of the App 
+$MSI = Get-AzFunctionApp -Name $outputs.Outputs.azFuncAppName.Value -ResourceGroup $rgName
+$AzFuncMSIServicePrincipal = Get-AzADServicePrincipal -Id $MSI.IdentityPrincipalId
 
 ## Add redirect URI and enable ID token issuance for the AAD app associated with Azure Function
 $webProperties = [Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Models.ApiV10.IMicrosoftGraphWebApplication]@{
@@ -440,7 +450,7 @@ Update-MgApplication -ApplicationId $customConnAppObjectID -BodyParameter $param
 $outputsData = [ordered]@{
     FunctionApp       = 'https://'+ $outputs.Outputs.azFuncHostName.value
     #FunctionKey      = $outputs.Outputs.azFuncAppCode.Value
-    Tenant    = $tenantName
+    #Tenant    = $tenantName
     TenantID  = $(Get-AzTenant).Id
     AzFunctionAADApplicationID      = $clientID
     AzFunctionAADAppIDURI           = $AppIdURI
@@ -457,4 +467,4 @@ Write-Host -ForegroundColor magenta "Here is the information you'll need to depl
 disconnect-MgGraph
 disconnect-AzAccount
 
-$outputsData
+$outputsData | FT

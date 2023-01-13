@@ -13,7 +13,7 @@ $uri = "https://graph.microsoft.com/v1.0/me"
 $userId = (Invoke-MgGraphRequest -Method Get -Uri $uri).id
 
 #Create M365 group using Microsoft Graph PowerShell
-$Owner = "https://graph.microsoft.com/v1.0/users/" + $userId
+$Owner = "https://graph.microsoft.com/v1.0/users/$userId"
 $params = @{
 	Description = "SPO site used as backend for the Call Queue Scheduler app"
 	DisplayName = $SPOSiteTitle
@@ -63,8 +63,8 @@ Invoke-PnPSiteTemplate -Path ..\Pkgs\shift-manager-site-lists.xml -Verbose -Igno
 
 Write-Host -ForegroundColor magenta "Here is the information you'll need to deploy and configure while following the remaining steps"
 
-Write-Host "SPO Site Url: "+ $siteInfo.webUrl
-Write-Host "SPO Site ID: "+ $siteInfo.Id
+Write-Host "SPO Site Url: " $siteInfo.webUrl
+Write-Host "SPO Site ID: " $siteInfo.Id
 Get-MgSiteList -SiteId $siteInfo.Id | ?{$_.Name -like "Shifts*"} | Select DisplayName, Id, WebUrl
 
 
