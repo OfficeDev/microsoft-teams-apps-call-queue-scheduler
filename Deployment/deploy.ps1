@@ -412,8 +412,7 @@ Catch {
 
 ## Connect to Graph API and retrieving Graph API id
 $token = Get-AzAccessToken -ResourceUrl "https://graph.microsoft.com"
-#Connect-MgGraph -AccessToken $token.Token
-Connect-MgGraph -DeviceCode -Scopes "AppRoleAssignment.ReadWrite.All","Application.Read.All"
+Connect-MgGraph -AccessToken $token.Token #Connect-MgGraph -DeviceCode -Scopes "AppRoleAssignment.ReadWrite.All","Application.Read.All", "Directory.ReadWrite.All"
 $GraphServicePrincipal = Get-MgServicePrincipal -Filter "startswith(DisplayName,'Microsoft Graph')" | Select-Object -first 1 
 
 # Assigning sites selected permission
