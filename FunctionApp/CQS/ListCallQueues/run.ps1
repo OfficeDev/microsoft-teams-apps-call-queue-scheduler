@@ -1,18 +1,16 @@
+## Connect to MS Teams and get all the call queue's along with agents info
 using namespace System.Net
 
 # Input bindings are passed in via param block.
 param($Request, $TriggerMetadata)
 
-#$secpasswd = ConvertTo-SecureString -String $ENV:CCServiceAccountPwd -AsPlainText -Force 
-#$mycreds = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList $ENV:CCServiceAccountId, $secpasswd
-
 $secpasswd = ConvertTo-SecureString -String $ENV:ShiftsMgrSvcAccountPwd -AsPlainText -Force 
 $mycreds = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList $ENV:ShiftsMgrSvcAccountId, $secpasswd
 
-
 <#
-$SvcAcctPwd = "PES@"
-$SvcAcctId = "shiftmgr@m365x229910.onmicrosoft.com"
+#Use this block to test with hard coded credentials
+$SvcAcctPwd = "***"
+$SvcAcctId = "shiftmgr@contoso.onmicrosoft.com"
 $secpasswd = ConvertTo-SecureString -String $SvcAcctPwd -AsPlainText -Force 
 $mycreds = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList $SvcAcctId, $secpasswd
 #>

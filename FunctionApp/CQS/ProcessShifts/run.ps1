@@ -1,3 +1,7 @@
+##PURPOSE: This is the timer job that wakes up periodically and checks for any scheduling operations (add/remove of agents) to be executed. This done by checking the SPO list.
+##Performs those operations and thus achieve the goal of managing agents without manual intervention
+##Currently this function is configured to run schedules against only one call queue that is hardcoded in line#24. You must update it for it to work.
+##To support multiple call queues, the code must be either updated or make a copy of this into a new function and set the call queue id
 # Input bindings are passed in via param block.
 param($Timer)
 
@@ -14,7 +18,7 @@ Import-Module $GetSchedules
 Import-Module $UpdateSchedules
 $authHeader = Get-AuthenticationToken
 
-#"https://graph.microsoft.com/v1.0/sites/m365x229910.sharepoint.com,4d5a27d4-5891-420f-8822-e29376ca4eed,b2648eb8-4d00-4bc3-b3bb-f5c96ec3ad7d/lists/ade46535-7cd3-4418-b872-5b752c830dfa/items?expand=fields(select=Id, Title, AgentShiftDate, Time, AgentEmail, AgentUserId, ActionType, IsComplete)&`$filter=fields/AgentShiftDate eq '$Date' and fields/Time eq '$Time' and fields/IsComplete eq 0 and fields/Removed eq 0"
+#"https://graph.microsoft.com/v1.0/sites/contoso.sharepoint.com,4d5a27d4-5891-420f-8822-e29376ca4eed,b2648eb8-4d00-4bc3-b3bb-f5c96ec3ad7d/lists/ade46535-7cd3-4418-b872-5b752c830dfa/items?expand=fields(select=Id, Title, AgentShiftDate, Time, AgentEmail, AgentUserId, ActionType, IsComplete)&`$filter=fields/AgentShiftDate eq '$Date' and fields/Time eq '$Time' and fields/IsComplete eq 0 and fields/Removed eq 0"
 
 ## TODO: MAKE THIS CONFIGURABLE
 $CQid= $ENV:ShiftMgrCallQueueId #"a072605c-0130-4792-80cf-d379f518358d"
@@ -24,7 +28,7 @@ $ChangeLogListId = $ENV:ShiftsMgrChangeLogListId
 $IsCompleted = "true"
 $Date=$currentUTCtime.split(" ")[0]
 $Time=$currentUTCtime.split(" ")[1]
-$ListUrl = "https://graph.microsoft.com/v1.0/sites/$SPOSiteId/lists/$ManifestListId/items?expand=fields(select=Id, Title, AgentShiftDate, Time, AgentEmail, AgentUserId, ActionType, IsComplete)&`$filter=fields/AgentShiftDate eq '$Date' and fields/Time eq '$Time' and fields/IsComplete eq 0 and fields/Removed eq 0"
+$ListUrl = "https://graph.microsoft.com/v1.0/sites/$SPOSiteId/lists/$ManifestListId/items?expand=fields(select=Id, Title, AgentShiftDate, Time, AgentEmail, AgentUserId, ActionType, IsComplete)&`$filter=fields/AgentShiftDate eq '$Date' and fields/Time eq '$Time' and fields/IsComplete eq 0 and fields/Removed eq 0 and fields/CallQueue eq '$CQid'"
 $SchedulesInfoObject = Get-SchedulesByTime -Token $authHeader -ListUrlWithFilter $ListUrl #-Date $Date -Time $Time -ListUrl 
 $agentsToAdd = @()
 $agentsToRemvoe = @()

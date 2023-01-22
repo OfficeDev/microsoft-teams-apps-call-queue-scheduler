@@ -33,13 +33,7 @@
             "metadata": {
                 "description": "AzureAD application secret - To be stored in Azure KeyVault"
             }
-        },  
-        "TeamsPSModuleVersion": {
-            "type": "string",
-            "metadata": {
-                "description": "Microsoft Teams PowerShell module version"
-            }
-        },                                 
+        },                             
         "packageURI": {
             "type": "string",
             "metadata": {
@@ -160,11 +154,10 @@
                     "properties": {
                         "ShiftsMgrSvcAccountId"   : "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName') ,';SecretName=CQS-service-account-name)')]",
                         "ShiftsMgrSvcAccountPwd" : "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName') ,';SecretName=CQS-service-account-secret)')]",
-                        "ShiftMgrCallQueueId" : "Placed holder for Shifts Manager Call Queue Id",
                         "ShiftsMgrSPOSiteId" : "Placed holder for Shifts Manager SPO Site Id",
                         "ShiftsMgrManifestListId" : "Placed holder for Shifts Manager Manifest List Id",
                         "ShiftsMgrChangeLogListId" : "Placed holder for Shifts Manager Change Log List Id",
-                        "TeamsPSVersion" : "[parameters('TeamsPSModuleVersion')]",
+                        "ShiftsMgrCallQueueOwnersListId" : "Placed holder for Shifts Manager Call Queue Owners List Id",
                         "AzureWebJobsStorage" : "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('stoAccountName'), ';EndpointSuffix=', environment().suffixes.storage, ';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('stoAccountName')), '2019-06-01').keys[0].value)]",
                         "FUNCTIONS_EXTENSION_VERSION" : "~4",
                         "FUNCTIONS_WORKER_PROCESS_COUNT": "3",

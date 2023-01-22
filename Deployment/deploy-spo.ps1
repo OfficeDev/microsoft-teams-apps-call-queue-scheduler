@@ -33,7 +33,7 @@ Write-Host ""
 Write-Host -ForegroundColor magenta "Here is the information you'll need to deploy and configure while following the remaining steps"
 Write-Host "SPO Site Url: " $site
 Write-Host "SPO Site ID: $SPOHostUrl,$($RootWeb.Id),$($Web.Id)"
-Get-PnPList | ?{$_.Title -like "Shifts*"} | FT
+Get-PnPList | ?{$_.Title -like "Shifts*" -or $_.Title -like "CallQueue*"} | FT
 
 # Disconnecting session
 Disconnect-PnPOnline

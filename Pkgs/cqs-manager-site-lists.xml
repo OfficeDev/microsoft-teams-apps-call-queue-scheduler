@@ -1,16 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
   <pnp:Preferences Generator="PnP.Framework, Version=1.11.2.0, Culture=neutral, PublicKeyToken=0d501f89f11b748c" />
-  <pnp:Templates ID="CONTAINER-TEMPLATE-0F6E6CA4CE5F4F1ABEBD78D87D16EAAC">
-    <pnp:ProvisioningTemplate ID="TEMPLATE-0F6E6CA4CE5F4F1ABEBD78D87D16EAAC" Version="1" BaseSiteTemplate="GROUP#0" Scope="RootSite">
+  <pnp:Templates ID="CONTAINER-TEMPLATE-0EDC999374CA4EE88F1028C495230748">
+    <pnp:ProvisioningTemplate ID="TEMPLATE-0EDC999374CA4EE88F1028C495230748" Version="1" BaseSiteTemplate="GROUP#0" Scope="RootSite">
       <pnp:Lists>
+        <pnp:ListInstance Title="CallQueueOwners" Description="" DocumentTemplate="" OnQuickLaunch="true" TemplateType="100" Url="Lists/CallQueueOwners" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" EnableFolderCreation="false" DefaultDisplayFormUrl="{site}/Lists/CallQueueOwners/DispForm.aspx" DefaultEditFormUrl="{site}/Lists/CallQueueOwners/EditForm.aspx" DefaultNewFormUrl="{site}/Lists/CallQueueOwners/NewForm.aspx" ImageUrl="/_layouts/15/images/itgen.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage="">
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x01" Default="true" />
+            <pnp:ContentTypeBinding ContentTypeID="0x0120" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views>
+            <View Name="{E08012B8-665A-42DE-A5C2-0BEEE6ECC432}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="All Items" Url="{site}/Lists/CallQueueOwners/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+              <Query />
+              <ViewFields>
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="OwnerEmail" />
+                <FieldRef Name="CallQueueId" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+              <CustomFormatter />
+            </View>
+          </pnp:Views>
+          <pnp:Fields>
+            <Field DisplayName="OwnerEmail" Format="Dropdown" IsModern="TRUE" MaxLength="255" Name="OwnerEmail" Title="OwnerEmail" Type="Text" ID="{9a732192-2c9b-4ae7-bfdf-6b18ac5ff5d4}" SourceID="{{listid:CallQueueOwners}}" StaticName="OwnerEmail" ColName="nvarchar4" RowOrdinal="0" />
+            <Field DisplayName="CallQueueId" Format="Dropdown" IsModern="TRUE" MaxLength="255" Name="CallQueueId" Title="CallQueueId" Type="Text" ID="{d616ad88-c1c4-427d-9835-1a0d174aa946}" SourceID="{{listid:CallQueueOwners}}" StaticName="CallQueueId" ColName="nvarchar5" RowOrdinal="0" />
+          </pnp:Fields>
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" DisplayName="Title" />
+          </pnp:FieldRefs>
+          <pnp:Webhooks>
+            <pnp:Webhook ServerNotificationUrl="https://eastus1-0.pushnp.svc.ms/notifications?token=037c14cd-7f99-4f32-96d9-1e53fc81bf80" ExpiresInDays="1" />
+          </pnp:Webhooks>
+        </pnp:ListInstance>
         <pnp:ListInstance Title="ShiftsChangeLog" Description="" DocumentTemplate="" OnQuickLaunch="true" TemplateType="100" Url="Lists/ShiftsChangeLog" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" EnableFolderCreation="false" DefaultDisplayFormUrl="{site}/Lists/ShiftsChangeLog/DispForm.aspx" DefaultEditFormUrl="{site}/Lists/ShiftsChangeLog/EditForm.aspx" DefaultNewFormUrl="{site}/Lists/ShiftsChangeLog/NewForm.aspx" ImageUrl="/_layouts/15/images/itgen.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage="">
           <pnp:ContentTypeBindings>
             <pnp:ContentTypeBinding ContentTypeID="0x01" Default="true" />
             <pnp:ContentTypeBinding ContentTypeID="0x0120" />
           </pnp:ContentTypeBindings>
           <pnp:Views>
-            <View Name="{CDDF7A7B-D742-4E44-B5EB-DA7B9E3ADF78}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="All Items" Url="{site}/Lists/ShiftsChangeLog/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+            <View Name="{BA4F6575-A89B-4FD8-AE51-777735D4FE54}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="All Items" Url="{site}/Lists/ShiftsChangeLog/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
               <Query />
               <ViewFields>
                 <FieldRef Name="ChangeRequestedBy" />
@@ -22,6 +51,7 @@
                 <FieldRef Name="Time" />
                 <FieldRef Name="LinkTitle" />
                 <FieldRef Name="ID" />
+                <FieldRef Name="CallQueue" />
               </ViewFields>
               <RowLimit Paged="TRUE">30</RowLimit>
               <JSLink>clienttemplates.js</JSLink>
@@ -36,6 +66,7 @@
             <Field DisplayName="AgentsAfterChange" Format="Dropdown" IsModern="TRUE" MaxLength="255" Name="AgentsAfterChange" Title="AgentsAfterChange" Type="Text" ID="{673a82c2-f77b-4212-8ffd-ca8a46704d49}" SourceID="{{listid:ShiftsChangeLog}}" StaticName="AgentsAfterChange" ColName="nvarchar8" RowOrdinal="0" />
             <Field DisplayName="Date" Format="Dropdown" IsModern="TRUE" MaxLength="255" Name="Date" Title="Date" Type="Text" ID="{437a5431-76a9-4278-9114-beb18f6a9cd9}" SourceID="{{listid:ShiftsChangeLog}}" StaticName="Date" ColName="nvarchar9" RowOrdinal="0" />
             <Field DisplayName="Time" Format="Dropdown" IsModern="TRUE" MaxLength="255" Name="Time" Title="Time" Type="Text" ID="{de42d6f4-e1ba-455a-b7bd-eb7982e8e9ba}" SourceID="{{listid:ShiftsChangeLog}}" StaticName="Time" ColName="nvarchar10" RowOrdinal="0" />
+            <Field DisplayName="CallQueue" Format="Dropdown" IsModern="TRUE" MaxLength="255" Name="CallQueue" Title="CallQueue" Type="Text" ID="{bf398f28-6d00-497c-8b6b-da875f371142}" SourceID="{{listid:ShiftsChangeLog}}" StaticName="CallQueue" ColName="nvarchar11" RowOrdinal="0" />
           </pnp:Fields>
           <pnp:FieldRefs>
             <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" DisplayName="Title" />
@@ -47,7 +78,7 @@
             <pnp:ContentTypeBinding ContentTypeID="0x0120" />
           </pnp:ContentTypeBindings>
           <pnp:Views>
-            <View Name="{A0EE61B7-74B9-4164-8343-E65707C450F0}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="All Documents" Url="{site}/ShiftsCSVDocuments/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/dlicon.png?rev=47">
+            <View Name="{2852FFE2-94A1-4E49-93E3-7130D0B75087}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="All Documents" Url="{site}/ShiftsCSVDocuments/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/dlicon.png?rev=47">
               <Query>
                 <OrderBy>
                   <FieldRef Name="FileLeafRef" />
@@ -59,6 +90,7 @@
                 <FieldRef Name="Modified" />
                 <FieldRef Name="Editor" />
                 <FieldRef Name="IsProcessed" />
+                <FieldRef Name="CallQueueSelected" />
               </ViewFields>
               <RowLimit Paged="TRUE">30</RowLimit>
               <JSLink>clienttemplates.js</JSLink>
@@ -69,6 +101,7 @@
             <Field DisplayName="IsProcessed" Format="Dropdown" IsModern="TRUE" Name="IsProcessed" Title="IsProcessed" Type="Boolean" ID="{588990ae-ba44-4e7e-9b2a-ef86e38bf57a}" SourceID="{{listid:ShiftsCSVDocuments}}" StaticName="IsProcessed" ColName="bit2" RowOrdinal="0">
               <Default>0</Default>
             </Field>
+            <Field DisplayName="CallQueueSelected" Format="Dropdown" IsModern="TRUE" MaxLength="255" Name="CallQueueSelected" Title="CallQueueSelected" Type="Text" ID="{1d7a8dca-4f14-42ef-b9dd-66556e0dbadb}" SourceID="{{listid:ShiftsCSVDocuments}}" StaticName="CallQueueSelected" ColName="nvarchar14" RowOrdinal="0" />
           </pnp:Fields>
           <pnp:FieldRefs>
             <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" DisplayName="Title" />
@@ -76,6 +109,9 @@
             <pnp:FieldRef ID="d307dff3-340f-44a2-9f4b-fbfe1ba07459" Name="_CommentCount" DisplayName="Comment count" />
             <pnp:FieldRef ID="db8d9d6d-dc9a-4fbd-85f3-4a753bfdc58c" Name="_LikeCount" DisplayName="Like count" />
           </pnp:FieldRefs>
+          <pnp:Webhooks>
+            <pnp:Webhook ServerNotificationUrl="https://eastus1-0.pushnp.svc.ms/notifications?token=4b7830ae-5e44-418b-8bac-a08f6899bb1b" ExpiresInDays="1" />
+          </pnp:Webhooks>
         </pnp:ListInstance>
         <pnp:ListInstance Title="ShiftsManifest" Description="" DocumentTemplate="" OnQuickLaunch="true" TemplateType="100" Url="Lists/ShiftsManifest" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" EnableFolderCreation="false" DefaultDisplayFormUrl="{site}/Lists/ShiftsManifest/DispForm.aspx" DefaultEditFormUrl="{site}/Lists/ShiftsManifest/EditForm.aspx" DefaultNewFormUrl="{site}/Lists/ShiftsManifest/NewForm.aspx" ImageUrl="/_layouts/15/images/itgen.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage="">
           <pnp:ContentTypeBindings>
@@ -83,7 +119,7 @@
             <pnp:ContentTypeBinding ContentTypeID="0x0120" />
           </pnp:ContentTypeBindings>
           <pnp:Views>
-            <View Name="{DBE43355-FDF3-43F4-91DB-C5675E7285D2}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="All Items" Url="{site}/Lists/ShiftsManifest/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
+            <View Name="{B0A6059D-DB02-48E6-B4A9-A0DA1834C985}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="All Items" Url="{site}/Lists/ShiftsManifest/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/generic.png?rev=47">
               <Query />
               <ViewFields>
                 <FieldRef Name="Edit" />
@@ -104,6 +140,7 @@
                 <FieldRef Name="LinkTitle" />
                 <FieldRef Name="Removed" />
                 <FieldRef Name="ShiftLink" />
+                <FieldRef Name="CallQueue" />
               </ViewFields>
               <RowLimit Paged="TRUE">30</RowLimit>
               <Aggregations Value="Off" />
@@ -137,12 +174,13 @@
               <Default>0</Default>
             </Field>
             <Field DisplayName="ShiftLink" Format="Dropdown" IsModern="TRUE" MaxLength="255" Name="ShiftLink" Title="ShiftLink" Type="Text" ID="{47b519a2-7138-4c24-bfbe-afaee01567c4}" SourceID="{{listid:ShiftsManifest}}" StaticName="ShiftLink" ColName="nvarchar14" RowOrdinal="0" />
+            <Field DisplayName="CallQueue" Format="Dropdown" IsModern="TRUE" MaxLength="255" Name="CallQueue" Title="CallQueue" Type="Text" ID="{2b94c170-435c-4c73-9fee-0a8c174484ce}" SourceID="{{listid:ShiftsManifest}}" StaticName="CallQueue" ColName="nvarchar15" RowOrdinal="0" />
           </pnp:Fields>
           <pnp:FieldRefs>
             <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" DisplayName="Title" />
           </pnp:FieldRefs>
           <pnp:Webhooks>
-            <pnp:Webhook ServerNotificationUrl="https://southcentralus1-0.pushnp.svc.ms/notifications?token=02a3cd69-9f1a-4fae-90a9-fb4afa630b61" ExpiresInDays="1" />
+            <pnp:Webhook ServerNotificationUrl="https://eastus1-0.pushnp.svc.ms/notifications?token=df22d6be-507a-4d4a-9dfb-6b2d167fd589" ExpiresInDays="1" />
           </pnp:Webhooks>
         </pnp:ListInstance>
         <pnp:ListInstance Title="ShiftsManifestArchive" Description="" DocumentTemplate="{site}/ShiftsManifestArchive/Forms/template.dotx" OnQuickLaunch="true" TemplateType="101" Url="ShiftsManifestArchive" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="500" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-e717-4e80-aa17-d0c71b360101" EnableAttachments="false" DefaultDisplayFormUrl="{site}/ShiftsManifestArchive/Forms/DispForm.aspx" DefaultEditFormUrl="{site}/ShiftsManifestArchive/Forms/EditForm.aspx" DefaultNewFormUrl="{site}/ShiftsManifestArchive/Forms/Upload.aspx" ImageUrl="/_layouts/15/images/itdl.png?rev=47" IrmExpire="false" IrmReject="false" IsApplicationList="false" ValidationFormula="" ValidationMessage="">
@@ -151,7 +189,7 @@
             <pnp:ContentTypeBinding ContentTypeID="0x0120" />
           </pnp:ContentTypeBindings>
           <pnp:Views>
-            <View Name="{6C1EF97A-0EFE-466D-99F4-1A0703E25B15}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="All Documents" Url="{site}/ShiftsManifestArchive/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/dlicon.png?rev=47">
+            <View Name="{EABB97C0-4382-4723-BA8F-AA95AF76BB4D}" DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="All Documents" Url="{site}/ShiftsManifestArchive/Forms/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x" ImageUrl="/_layouts/15/images/dlicon.png?rev=47">
               <Query>
                 <OrderBy>
                   <FieldRef Name="FileLeafRef" />

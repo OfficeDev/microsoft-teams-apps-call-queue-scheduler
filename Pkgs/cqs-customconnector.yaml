@@ -3,7 +3,7 @@ info:
   title: CQS Helper API
   description: ''
   version: '1.0'
-host: cqs-gpy4f.azurewebsites.net
+host: '@environmentVariables("cr8c9_CustomConnectorAzFunctionHostUrl")'
 basePath: /
 schemes:
   - https
@@ -21,23 +21,31 @@ paths:
       x-ms-visibility: important
       description: List teams call queues
   /api/UpdateCallQueueAgents:
-    get:
+    post:
       responses:
         default:
           description: default
           schema: {}
-      summary: UpdateCallQueueAgents
-      description: Updates agents listed in the call queue
-      operationId: UpdateCallQueueAgents
+      summary: UpdateSelectCallQueueAgents
+      operationId: UpdateSelectCallQueueAgents
       parameters:
-        - name: CQId
-          in: query
+        - name: Accept
+          in: header
           required: false
           type: string
-        - name: agents
-          in: query
+        - name: body
+          in: body
           required: false
-          type: string
+          schema:
+            type: object
+            properties:
+              CQId:
+                type: string
+                description: CQId
+              AgentsList:
+                type: string
+                description: AgentsList
+      description: Updates the call queue agents
   /api/CsvInputParser:
     post:
       responses:
@@ -83,15 +91,32 @@ paths:
           required: false
           type: string
       description: GetCallQueueDetailsById
-  /api/TestAzFunction:
+  /api/TestAzFunction: {}
+  /api/GetCallQueues:
     get:
       responses:
         default:
           description: default
-          schema: {}
-      summary: Test calling AAD secured Azure Function
-      operationId: TestAzFun
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                Name:
+                  type: string
+                  description: Name
+                Identity:
+                  type: string
+                  description: Identity
+                Agents:
+                  type: array
+                  items:
+                    type: string
+                  description: Agents
+      summary: Get call queues details managed by current user
+      operationId: GetCallQueuesForCurrentUser
       parameters: []
+      description: Get call queues details managed by current user
 definitions: {}
 parameters: {}
 responses: {}

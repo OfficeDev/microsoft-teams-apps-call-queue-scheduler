@@ -1,3 +1,5 @@
+##PURPOSE: This functions gets called from flow when user uploads a CSV file. This functions get the CSV file content. Parses it, generates a manifest of operations (add and remove) for agents schedule.
+##The schedules are added to SPO site.
 using namespace System.Net
 
 # Input bindings are passed in via param block.
@@ -125,6 +127,7 @@ $allShifts | %{
         if ($r.requests.Count -eq 20 -or $i -eq $totalEntries-1) {
             $payload = ConvertTo-Json $r -Depth 4
             Write-Host "Batch run id $i"
+            Write-Host $payload
             $result = Add-SchedulesBatch -Token $authHeader -Payload $payload -BatchId $i
             Write-Host $result.StatusCode
             Write-Host $result.Content
