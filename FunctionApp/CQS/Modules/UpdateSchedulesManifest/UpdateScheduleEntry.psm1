@@ -18,7 +18,7 @@ function Update-ScheduleEntry
 
 function Add-ShiftsChangeLog
 {
-	param ($Token, $DateStr, $TimeStr, $ChangeBy, $AgentsBeforeChange, $AgentsAfterChange, $AgentsToAdd, $AgentsToRemove, $SPOSiteId, $ChangeLogListId)
+	param ($Token, $DateStr, $TimeStr, $ChangeBy, $AgentsBeforeChange, $AgentsAfterChange, $AgentsToAdd, $AgentsToRemove, $SPOSiteId, $ChangeLogListId, $CallQueueId)
     
 	Write-Host "Add new entry to change log: $Date $Time"
 	#$uri = "https://graph.microsoft.com/v1.0/sites/m365x229910.sharepoint.com,4d5a27d4-5891-420f-8822-e29376ca4eed,b2648eb8-4d00-4bc3-b3bb-f5c96ec3ad7d/lists/4a41bf5c-41a7-444b-9b0c-1d55d2a62a5e/items"
@@ -26,7 +26,7 @@ function Add-ShiftsChangeLog
 	$postBody =@"
 	{
 		"fields": {
-			"Title": "Timerjob",
+			"Title": "Timerjob|$CallQueueId",
 			"ChangeRequestedBy": "Service Account",
 			"Date": "$DateStr",
 			"Time": "$TimeStr",

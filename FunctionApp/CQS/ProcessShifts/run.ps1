@@ -20,8 +20,8 @@ $authHeader = Get-AuthenticationToken
 
 #"https://graph.microsoft.com/v1.0/sites/contoso.sharepoint.com,4d5a27d4-5891-420f-8822-e29376ca4eed,b2648eb8-4d00-4bc3-b3bb-f5c96ec3ad7d/lists/ade46535-7cd3-4418-b872-5b752c830dfa/items?expand=fields(select=Id, Title, AgentShiftDate, Time, AgentEmail, AgentUserId, ActionType, IsComplete)&`$filter=fields/AgentShiftDate eq '$Date' and fields/Time eq '$Time' and fields/IsComplete eq 0 and fields/Removed eq 0"
 
-## TODO: MAKE THIS CONFIGURABLE
-$CQid= $ENV:ShiftMgrCallQueueId #"a072605c-0130-4792-80cf-d379f518358d"
+## TODO: REPLACE WITH YOUR CALL QUEUE ID
+$CQid= "fc66a46c-fb4d-4e97-9931-ae52a8f47594"
 $SPOSiteId = $ENV:ShiftsMgrSPOSiteId
 $ManifestListId = $ENV:ShiftsMgrManifestListId
 $ChangeLogListId = $ENV:ShiftsMgrChangeLogListId
@@ -81,7 +81,7 @@ if ($agentsToAdd.Length + $agentsToRemvoe.Length -gt 0)
     # SET THE ISCOMPELTE TO TRUE FOR THE PROCESSED ITEMS
     $SchedulesInfoObject.value | %{ Update-ScheduleEntry -Token $authHeader -Id $_.fields.id -IsComplete $IsCompleted -SPOSiteid $SPOSiteId -ManifestListId $ManifestListId}
     #Add-ShiftsChangeLog -Token $authHeader -Date $Date -Time $Time -ChangeBy "Service Account" -AgentsBeforeChange $agentsChangLog.CurrentAgents -AgentsToAdd $agentsChangLog.AgentsToAdd -AgentsToRemove $agentsChangLog.AgentsToRemove -AgentsAfterChange $agentsChangLog.NewAgents
-    Add-ShiftsChangeLog -Token $authHeader -DateStr $Date -TimeStr $Time -ChangeBy "Service Account" -AgentsBeforeChange ($agentsChangLog.CurrentAgents -join ", ") -AgentsToAdd ($agentsChangLog.AgentsToAdd -join ", ") -AgentsToRemove ($agentsChangLog.AgentsToRemove -join ", ") -AgentsAfterChange ($agentsChangLog.NewAgents -join ", ") -SPOSiteid $SPOSiteId -ChangeLogListId $ChangeLogListId
+    Add-ShiftsChangeLog -Token $authHeader -DateStr $Date -TimeStr $Time -ChangeBy "Service Account" -AgentsBeforeChange ($agentsChangLog.CurrentAgents -join ", ") -AgentsToAdd ($agentsChangLog.AgentsToAdd -join ", ") -AgentsToRemove ($agentsChangLog.AgentsToRemove -join ", ") -AgentsAfterChange ($agentsChangLog.NewAgents -join ", ") -SPOSiteid $SPOSiteId -ChangeLogListId $ChangeLogListId -CallQueueId $CQid
 }
 else
 {
