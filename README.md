@@ -26,7 +26,9 @@ This application provides the following capability:
             * remove an agent from the existing schedule
             * modify the shift of a scheduled agent.
 
-This application works by manipulating the list of named agents in a Call Queue.  This application does NOT support agents defined as part of a group or a Team channel.  Since this application leverages named agents, the number of agents that can be active in the queue at the same time is limited to 20.  The number of agents that could be potentially added to the queue can be much greater.  
+This application works by manipulating the list of named agents in a Call Queue.  This application does NOT support agents defined as part of a group or a Team channel.  Since this application leverages named agents, the number of agents that can be active in the queue at the same time is limited to 20.  The number of agents that could be potentially added to the queue can be much greater.
+
+The people picker presented in the app shows all the users in your organization. Due to our API limitation we cannot filter the users to show only those with enterprise voice enabled. Adding agents will be successful only if the selecter user(s) are enterprise voice enabled. You will not see any error thrown if the user is not enterprise voice enabled and you attempt to add them as an agent.
 
 See Step 3: Set up who will answer incoming calls [here](https://learn.microsoft.com/en-us/microsoftteams/create-a-phone-system-call-queue#steps-to-create-a-call-queue) for detail on the different ways agents can be defined to answer calls. 
 
