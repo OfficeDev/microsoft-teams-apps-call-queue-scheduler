@@ -42,10 +42,16 @@ $allShifts = @()
         $agentUpn = $_.$($h.PSObject.Properties.Name[$currentDay])
         $currentDt = ([DateTime] $h.PSObject.Properties.Name[$currentDay]).ToString("MM/dd/yyyy")   
         $nextDt = ([DateTime] $h.PSObject.Properties.Name[$currentDay]).AddDays(1).ToString("MM/dd/yyyy")
+        <#
         $startTime = ([DateTime]($_.Assignment.Split(" ")[2].Split("-")[0].Trim() + "m")).ToString("HH:mm")
         $endTime = ([DateTime]($_.Assignment.Split(" ")[2].Split("-")[1].Trim() + "m")).ToString("HH:mm")
         $startHr = [int32] ([DateTime]($_.Assignment.Split(" ")[2].Split("-")[0].Trim() + "m")).ToString("HH")
         $endHr = [int32] ([DateTime]($_.Assignment.Split(" ")[2].Split("-")[1].Trim() + "m")).ToString("HH")
+        #>
+        $startTime = ([DateTime]($_.Assignment.Split("-")[0].Trim())).ToString("HH:mm")
+        $endTime = ([DateTime]($_.Assignment.Split("-")[1].Trim())).ToString("HH:mm")
+        $startHr = [int32] ([DateTime]($_.Assignment.Split("-")[0].Trim())).ToString("HH")
+        $endHr = [int32] ([DateTime]($_.Assignment.Split("-")[1].Trim())).ToString("HH")
         $endDt = if(($endHr -gt $startHr) -or ($endHr -eq $startHr)) { 
                                 $currentDt
                             } else {
