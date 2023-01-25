@@ -16,10 +16,7 @@
         },      
         "appSecret": {
             "value": "XXXXXXXXXX"
-        },                   
-        "TeamsPSModuleVersion" : {
-            "value": "4.4.1"
-        },                           
+        },                        
         "packageURI" : {
             "value": "https://github.com/OfficeDev/microsoft-teams-apps-call-queue-scheduler/raw/main/Pkgs/cqs-function-artifact.zip"
         }

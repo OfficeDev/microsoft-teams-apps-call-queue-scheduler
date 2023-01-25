@@ -287,7 +287,6 @@ $parameters = @{
     serviceAccountSecret    = $serviceAccountSecret
     clientID                = $clientID
     appSecret               = $clientSecret
-    TeamsPSModuleVersion    = $teamsPSModuleVersion
 }
 
 $outputs = New-AzResourceGroupDeployment -ResourceGroupName $rgName -TemplateFile $base\ZipDeploy\azuredeploy.json -TemplateParameterObject $parameters -Name $deploymentName
