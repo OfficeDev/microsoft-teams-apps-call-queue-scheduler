@@ -9,9 +9,9 @@ This application allows a delegated administrator to manage the active agents fo
 
 ## About this application
 
-The Teams Admin Center (TAC) has the following limitations:
+The Teams Admin Center (TAC) and PowerShell are the two admin interfaces to manage Call Queues.  While both allow for an admin to full managability a Call Queue, this application has been developed to fill the following gaps:
 
-* granular delegatation capability to allow a defined administration to managed the named agents for a given Call Queue.
+* ability to delegate administration of the the agents for a given Call Queue.
 * scheduling agents in the Call Queue for specific shifts in the future.
 
 This application provides the following capability:
