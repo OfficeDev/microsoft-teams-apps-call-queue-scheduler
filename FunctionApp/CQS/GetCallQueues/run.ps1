@@ -25,18 +25,27 @@ $callqueueIds = @()
 $GetUsersCallQueues.value | %{
     $callqueueIds += $_.fields.CallQueueId
 }
-Write-output $callqueueIds 
+Write-output "# of call queues this user manages " $callqueueIds.length
 $secpasswd = ConvertTo-SecureString -String $ENV:ShiftsMgrSvcAccountPwd -AsPlainText -Force 
 $mycreds = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList $ENV:ShiftsMgrSvcAccountId, $secpasswd
 Connect-MicrosoftTeams -Credential $mycreds | Out-Null
-$body = Get-CsCallQueue | Select Name, Identity, Agents | ?{$_.Identity -in $callqueueIds} | ConvertTo-Json
-$body = $body.Replace(", OptIn","")
+#$body = Get-CsCallQueue | Select Name, Identity, Agents | ?{$_.Identity -in $callqueueIds} | ConvertTo-Json
+if($callqueueIds.length -le 1) 
+{
+    $body = Get-CsCallQueue | Select Name, Identity, Agents | ?{$_.Identity -in $callqueueIds} 
+    $body = ConvertTo-Json -InputObject @($body)
+}
+else
+{
+    $body = Get-CsCallQueue | Select Name, Identity, Agents | ?{$_.Identity -in $callqueueIds} | ConvertTo-Json   
+}
+$result = $body.Replace(", OptIn","")
 Write-output "PS Result>"
-Write-output `n$body
+Write-output `n$result
 Disconnect-MicrosoftTeams
 
 # Associate values to output bindings by calling 'Push-OutputBinding'.
 Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
     StatusCode = [HttpStatusCode]::OK
-    Body = $body
+    Body = $result
 })
