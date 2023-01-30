@@ -60,6 +60,7 @@ This is a costs estimates based on the public pricelist of January 2023. They do
 - [Power Apps pricing](https://powerapps.microsoft.com/en-us/pricing/)
 - [Azure Pricing calculator](https://azure.microsoft.com/en-us/pricing/calculator/)
 - [Azure AD pricing](https://azure.microsoft.com/en-us/pricing/details/active-directory/)
+- [Azure Functions Premium SKU pricing](https://learn.microsoft.com/en-us/azure/azure-functions/functions-premium-plan?tabs=portal)
 
 ## Contributing
 
