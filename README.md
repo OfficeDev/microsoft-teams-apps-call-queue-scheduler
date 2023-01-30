@@ -46,6 +46,21 @@ Here is the application running in Microsoft Teams
 
 If you want to start using the solution yourself review the Wiki for the deployment and configuration steps.
 
+## Cost Estimates
+This is a costs estimates based on the public pricelist of January 2023. They do not include the costs for Office 365 & Microsoft Teams.
+
+**All prices are provided for information only.**
+| Service  | Estimated usage  | Unit price  | Estimated cost / month  |
+|---|---|---|---|
+| Power Platform  | 20 admins (Premium connector) | $5 per user/app/month  | $100  |
+| Azure App Service plan  | EP1 SKU (1 core, 3.5GB RAM, 250GB storage) | $49.98 per instance/month | $50  |
+| Azure (other services)  | storage and keyvault request  | based on capacity (GB) & # requests  | <$1  |
+| Total estimated ||| $150 |
+
+- [Power Apps pricing](https://powerapps.microsoft.com/en-us/pricing/)
+- [Azure Pricing calculator](https://azure.microsoft.com/en-us/pricing/calculator/)
+- [Azure AD pricing](https://azure.microsoft.com/en-us/pricing/details/active-directory/)
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
