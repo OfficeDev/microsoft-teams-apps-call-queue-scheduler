@@ -11,13 +11,7 @@ Write-Host "PowerShell HTTP trigger function processed a request."
 $cqid = $Request.Body.CQId
 $agents = $Request.Body.AgentsList
 
-$body = "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-
-if ($agents) {
-    $body = $agents
-}
-
-$agentsList = $agents.Split(", ");
+$agentsList = If($agents.Trim().Length -eq 0) { $null } else { $agents.Split(", ") }
 
 $secpasswd = ConvertTo-SecureString -String $ENV:ShiftsMgrSvcAccountPwd -AsPlainText -Force 
 $mycreds = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList $ENV:ShiftsMgrSvcAccountId, $secpasswd
