@@ -17,7 +17,15 @@ $secpasswd = ConvertTo-SecureString -String $ENV:ShiftsMgrSvcAccountPwd -AsPlain
 $mycreds = New-Object -TypeName "System.Management.Automation.PSCredential" -ArgumentList $ENV:ShiftsMgrSvcAccountId, $secpasswd
 
 Connect-MicrosoftTeams -Credential $mycreds | Out-Null
-$body = Set-CsCallQueue -Users $agentsList -Identity $cqid | Select Name, Identity, Agents | ConvertTo-Json
+try {
+    Write-output "Agents List: $agentsList"
+    $body = Set-CsCallQueue -Users $agentsList -Identity $cqid | Select Name, Identity, Agents | ConvertTo-Json
+}
+catch {
+    Write-output $_.Exception.Message
+    $body = "Duplicate agents list provided"
+}
+
 Write-output "PS Result>"
 Write-output `n$body
 Disconnect-MicrosoftTeams
