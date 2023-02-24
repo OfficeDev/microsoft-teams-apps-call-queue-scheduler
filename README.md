@@ -5,7 +5,7 @@
 
 This application allows a delegated administrator to manage the active agents for a Microsoft Teams Call Queue in real-time and/or through a defined shift schedule.
 
-![Microsoft Teams Call Queue Scheduler screenshot](./Media/CQS-Home.png)
+[![Microsoft Teams Call Queue Scheduler screenshot](./Media/CQS-Home.png)](https://youtu.be/KQBKjXQ8_mY)(https://youtu.be/KQBKjXQ8_mY)
 
 ## About this application
 
